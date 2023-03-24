@@ -7,4 +7,3 @@ const x = integers.sort((a, b) => {return a-b}).filter(x => {return x < 19}).map
 // Then output (either in the DOM or the console) the sum of all the resulting numbers.
 
 export const chainedMethods = x
-console.log(chainedMethods)

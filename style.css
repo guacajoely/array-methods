@@ -3,3 +3,8 @@
 *{
     font-family: "Comfortaa", Arial, sans-serif;
 }
+
+#container {
+    padding: 20px;
+    background-color: lightgrey;
+}
