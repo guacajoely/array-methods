@@ -1,11 +1,11 @@
-import { createBigSpendas } from "./bigspenders.js"
 import { monthMostSales, mostCarsSold, mostLoans, mostPopularModel, personMostProfit, profit, zeroSales } from "./carDealership.js"
-import { chainedMethods } from "./chainedMethods.js"
 import { createCapPlanetList, createEPlanetsList, createPlanetList } from "./solarsystem.js"
+import { createBigSpendas } from "./bigspenders.js"
 import { createSpamList } from "./spam.js"
+import { chainedMethods } from "./chainedMethods.js"
 
 export const createHTML = () => {
-    
+
     return `<section id="container">
                 <h1>Car Dealership</h1>
                 <div id="dealership">
