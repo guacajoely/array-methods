@@ -45,13 +45,82 @@ function getMonthName(monthNumber) {
 
   export const monthMostSales = `<h3>2. Month with the highest sales = <span style="font-size: 25px">${getMonthName(highestSalesMonth)}</span></h3>`
 
-
 //3. Which salesperson sold the most cars?
-export const mostCarsSold = `<h3>3. Saleperson that sold the most cars = <span style="font-size: 25px"> INSERT RESULT HERE </span></h3>`
+
+//Lets go by email since some salespeople could have same first/last name
+//grab just the email from each sale 
+const arrayOfEmails = sales.map( sale => {
+    return sale.sales_agent.email
+})
+
+// now count how many times that email pops up throughout the array and create a new array of the emails with counts
+const emailsWithCounts = []
+for(const email of arrayOfEmails){
+    var count = 0;
+    for(const anotherEmail of arrayOfEmails){
+        if(email === anotherEmail){count++}
+    }
+    emailsWithCounts.push({email, count})
+}
+
+//we only need one count per email
+const singleCounts = Object.values(emailsWithCounts.reduce((acc,{email,count})=>
+   ((acc[email] = acc[email] || {email, count: 0}).count = count, acc), {}));
+
+//now sort them most to fewest and spit out array[0]
+const sortedByCount = singleCounts.sort((a, b) => { return b.count - a.count})
+const emailWithMostSales = sortedByCount[0].email
+
+console.log(emailWithMostSales)
+
+//we got their email, now lets grab the whole object to get their name
+const objectWithMostSales = sales.find((sale) => {
+    return sale.sales_agent.email === emailWithMostSales
+})
+
+const firstName = objectWithMostSales.sales_agent.first_name
+const lastName = objectWithMostSales.sales_agent.last_name
+
+export const mostCarsSold = `<h3>3. Saleperson that sold the most cars = <span style="font-size: 20px">${firstName} ${lastName} (${emailWithMostSales})</span></h3>`
 
 
 //4. Which salesperson made the most profit?
-export const personMostProfit = `<h3>4. Saleperson that made the most profit = <span style="font-size: 25px"> INSERT RESULT HERE </span></h3>`
+//This is going to look a lot like number 3, except instead of counting sales we need to total profit
+// we already grabbed everyones email in 3 with arrayOfEmails so lets just use that here too, but we only need one of each email
+const singleEmails = []
+arrayOfEmails.forEach((x) => {
+    if (!singleEmails.includes(x)) {
+        singleEmails.push(x)
+    }
+})
+
+//now we loop through sales and total the profit matching each email
+const emailsWithProfits = []
+for(const email of singleEmails){
+    let totalProfit = 0;
+    for(const sale of sales){
+        if(email === sale.sales_agent.email){
+            totalProfit += sale.gross_profit}
+    }
+    totalProfit = totalProfit.toFixed(2)
+    emailsWithProfits.push({email, totalProfit})
+}
+
+//now we sort and return array[0] and find their name just like we did in the 3rd exercise
+const sorted = emailsWithProfits.sort((a, b) => { return b.totalProfit - a.totalProfit})
+const emailWithMostProfit = sorted[0].email
+
+console.log(emailWithMostProfit)
+
+//we got their email, now lets grab the whole object to get their name
+const objectWithMostProfit = sales.find((sale) => {
+    return sale.sales_agent.email === emailWithMostProfit
+})
+
+const firstNameProfit = objectWithMostProfit.sales_agent.first_name
+const lastNameProfit = objectWithMostProfit.sales_agent.last_name
+
+export const personMostProfit = `<h3>4. Saleperson that made the most profit = <span style="font-size: 25px"> ${firstNameProfit} ${lastNameProfit} (${emailWithMostProfit}) </span></h3>`
 
 //5. Which model was the most popular?
 export const mostPopularModel = `<h3>5. Most popular car model sold = <span style="font-size: 25px"> INSERT RESULT HERE </span></h3>`
